@@ -12,16 +12,36 @@ class PagesController < ApplicationController
   end
 
   def create
-    @page= Page.new(page_params)
+    @page = Page.new(page_params)
     if @page.save
-      redirect_to page_path (@page)
+      redirect_to page_path(@page)
     else
       render :new
     end
   end
-end
 
-private
-  def page_params
-    params.require(:page).permit(:author, :title, :body)
+  def edit
+    @page = Page.find(params[:id])
   end
+
+  def update
+    @page = Page.find(params[:id])
+
+    if @page.update(page_params)
+      redirect_to page_path(@page)
+    else
+      render :edit
+    end
+  end
+  
+  def destroy
+    Page.find(params[:id]).destroy 
+    redirect_to pages_path
+  end
+
+  private
+    def page_params
+      params.require(:page).permit(:author, :title, :body)
+    end
+
+end
